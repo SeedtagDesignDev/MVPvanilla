@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://www.seedtag.com/static/images/seedtag-icon-red-aed656eca0e6f5a14a5ed6fc62e0d878.svg"
+    />
+    <title>Transform and Animation Generator</title>
+  </head>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ededed;
+      color: #171c2b;
+      font-size: 14px;
+      font-family: Roboto, sans-serif;
+    }
+    
+    input, button, select, label{
+      font-size: 13px;
+      font-family: Roboto, sans-serif;
+      font-weight: 400;
+    }
+
+    button:hover, label.button-upload:hover{
+      background-color: #171c2b;
+      color: #ededed;
+      transition: .2s;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 20px 0 10px 0;
+    }
+
+    /* Big containers */
+
+    .body-container {
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+    }
+
+    .sidebar-container {
+      width: 400px;
+      height: 100vh;
+      padding: 0px 20px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 1px 0px 8px rgba(23, 28, 43, 0.2);
+      overflow-y: scroll;
+    }
+
+    .creative-container {
+      width: calc(100% - 400px);
+      height: 100vh;
+      position: relative;
+      padding: 20px 30px;
+    }
+
+    /* Sidebar elements */
+
+    .result {
+      padding: 10px;
+      height: 100%;
+      min-height: 200px;
+      font-family: monospace;
+      resize: none;
+    }
+
+    .sidebar-element {
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .controls-container{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-element.controls {
+      width: 50%;
+      justify-content: start;
+    }
+
+    .checkbox,
+    .radio {
+      margin-right: 10px;
+    }
+
+    .select,
+    .button,
+    .input-text {
+      width: 250px;
+      background-color: transparent;
+      border: 1px solid #171c2b;
+      border-radius: 100px;
+      padding: 2px 10px;
+      margin-left: 10px;
+    }
+
+    .input-iteration {
+      width: 100px;
+      margin-left: 0px;
+    }
+
+    .input-perspective {
+      width: 100%;
+    }
+
+    .input-range {
+      width: 70px;
+    }
+
+    .range-transform {
+      width: 100%;
+    }
+
+    .select {
+      -moz-appearance: none; /* Firefox */
+      -webkit-appearance: none; /* Safari and Chrome */
+      appearance: none;
+      background: transparent;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+      background-repeat: no-repeat;
+      background-position-x: 100%;
+      background-position-y: center;
+    }
+
+    /* Creative elements */
+
+    .button-reload,
+    .button-upload{
+      width: 90px;
+      margin: 0 10px 10px 0;
+    }
+    
+    .input-upload{
+      display: none;
+    }
+
+    .input-size{
+      width: 80px;
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+
+    .main-container {
+      width: 400px;
+      height: 400px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid #171c2b;
+    }
+
+    .animated-element {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-image: url("https://creatives.seedtag.com/60f97b67d08a21002a244f1e/1675200884847.png");
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      border: 1px solid rgba(255, 0, 0, 0.3);
+    }
+
+    .grid {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-image: url("https://creatives.seedtag.com/60f97b67d08a21002a244f1e/1654774598757.svg");
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .slider {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background-color: #ededed;
+      border-radius: 20px;
+      filter: drop-shadow(0 0 20px rgb(41, 43, 49));
+      transform: translate(-50%, -50%);
+    }
+
+    .slider::after {
+      content: "";
+      width: 140%;
+      height: 140%;
+      position: absolute;
+      left: -20%;
+      bottom: -20%;
+      border-radius: 30px;
+      border: 1px solid #ededed;
+      box-sizing: border-box;
+    }
+
+  </style>
+  <body>
+    <div class="body-container">
+      <!-- Selectors and info -->
+      <div class="sidebar-container">
+        <h2>Controls</h2>
+        <div class="controls-container">
+          <div class="block sidebar-element controls">
+            <input
+              type="checkbox"
+              class="input-animated checkbox"
+              value="true"
+              checked
+            /><span>Animated</span>
+          </div>
+  
+          <div class="block sidebar-element controls">
+            <input
+              type="checkbox"
+              class="check-perspective checkbox"
+              value="true"
+            /><span>Perspective</span>
+            <input
+            type="number"
+            class="input-perspective input-text"
+            value="600"
+          />
+          </div>
+        </div>
+
+        <div class="block sidebar-element controls">
+          <input
+            type="checkbox"
+            class="input-grid checkbox"
+            value="true"
+          /><span>Show grid</span>
+        </div>
+
+        <h2>Transform properties</h2>
+        <div class="block sidebar-element">
+          <span>Transform:</span>
+          <select class="select select-transform" name="select-1">
+            <option value="translateX">TranslateX</option>
+            <option value="translateY">TranslateY</option>
+            <option value="rotateX">RotateX</option>
+            <option value="rotateY">RotateY</option>
+            <option value="rotateZ" selected>RotateZ</option>
+            <option value="scale">Scale</option>
+            <option value="skewX">SkewX</option>
+            <option value="skewY">SkewY</option>
+          </select>
+        </div>
+
+        <div class="block sidebar-element range-container range-1-container">
+          <input type="range" class="range-transform range-transform-1" value="0" />
+          <input class="input-text input-range input-range-1" type="number" value="0" />
+          <span class="range-transform-unit-1">&nbsp;deg</span>
+        </div>
+
+        <div class="block sidebar-element range-container">
+          <input type="range" class="range-transform range-transform-2" value="40" />
+          <input class="input-text input-range input-range-2" type="number" value="40" />
+          <span class="range-transform-unit-2">&nbsp;deg</span>
+        </div>
+
+        <h2>Animation properties</h2>
+        <div class="block sidebar-element">
+          <span>Duration:</span>
+          <div>
+            <input class="input-text input-duration" type="number" value="2" />
+            <span>&nbsp;s</span>
+          </div>
+        </div>
+
+        <div class="block sidebar-element">
+          <span>Delay:</span>
+          <div>
+            <input class="input-text input-delay" type="number" value="0" />
+            <span>&nbsp;s</span>
+          </div>
+        </div>
+
+        <div class="block sidebar-element">
+          <span>Acceleration:</span>
+          <select class="select select-timing" name="select-2">
+            <optgroup label="Keywords">
+              <option value="linear" selected>Linear</option>
+              <option value="ease">Ease (Gradual)</option>
+              <option value="ease-in">Ease in (Taking off)</option>
+              <option value="ease-out">Ease out (Slowing down)</option>
+            </optgroup>
+            <optgroup label="Bezier curves">
+              <option value="cubic-bezier(0.7, 0, 0.84, 0)">Faster take off</option>
+              <option value="cubic-bezier(0.36, 0, 0.66, -0.56)">Impulse take off</option>
+              <option value="cubic-bezier(0.22, 1, 0.36, 1)">Softer slowing down</option>
+              <option value="cubic-bezier(0.34, 1.56, 0.64, 1)">Soft bounce</option>
+              <option value="cubic-bezier(.57,.21,.69,3.25)">Big bounce</option>
+              <option value="cubic-bezier(0.68, -0.6, 0.32, 1.6)">Impulse and bounce</option>
+            </optgroup>
+            <optgroup label="Steps">
+              <option value="steps(2, jump-none)">2 steps</option>
+              <option value="steps(3, jump-none)">3 steps</option>
+              <option value="steps(4, jump-none)">4 steps</option>
+              <option value="steps(10, jump-none)">10 steps</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="block sidebar-element">
+          <span>Fill mode:</span>
+          <select class="select select-fill" name="select-3">
+            <option value="none">None (No fill)</option>
+            <option value="forwards">Forwards (Fills after animation)</option>
+            <option value="backwards">
+              Backwards (Fills before animation)
+            </option>
+            <option value="both" selected>Both (Fills before and after)</option>
+          </select>
+        </div>
+
+        <div class="block sidebar-element">
+          <span>Direction:</span>
+          <select class="select select-direction" name="select-4">
+            <option value="normal" selected>Normal</option>
+            <option value="reverse">Reverse (Plays backwards)</option>
+            <option value="alternate">
+              Alternate (Goes back and forth)
+            </option>
+            <option value="alternate-reverse">
+              Alternate Reverse (The 2 above)
+            </option>
+          </select>
+        </div>
+
+        <div class="block sidebar-element">
+          <span>Iteration count:</span>
+          <span
+            ><input
+              type="radio"
+              class="radio radio-iteration"
+              name="iteration-count"
+              value="infinite"
+              checked
+            />Infinite</span
+          >
+          <span
+            ><input
+              type="radio"
+              class="radio radio-iteration"
+              name="iteration-count"
+              value="number" /><input
+              class="input-text input-iteration"
+              type="number"
+              placeholder="Times"
+              value="1"
+          /></span>
+        </div>
+
+        <h2>Result</h2>
+        <textarea class="block result" readonly></textarea>
+      </div>
+
+      <!-- Creative container -->
+      <div class="creative-container">
+        <div class="main-container">
+          <div class="animated-element"></div>
+          <div class="grid"></div>
+          <div class="block slider"></div>
+        </div>
+        <div class="creative-controls-container">
+          <button class="button button-reload">Reload</button>
+          <label for="files" class="input-text button-upload">Upload image</label>
+          <input id="files" class="input-upload" style="visibility:hidden;" type="file">
+          <input type="number" placeholder="Width" class="input-text input-size input-width">
+          <span>x</span>
+          <input type="number" placeholder="Height" class="input-text input-size input-height">
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const sidebarDiv = document.querySelector(".sidebar-container");
+      const creativeDiv = document.querySelector(".creative-container");
+      const mainDiv = document.querySelector(".main-container");
+      const sliderDiv = document.querySelector(".slider");
+      const animDiv = document.querySelector(".animated-element");
+      const resultDiv = document.querySelector(".result");
+
+      const selects = document.querySelectorAll(".select");
+      const selectTransform = document.querySelector(".select-transform");
+      const rangeTransform1 = document.querySelector(".range-transform-1");
+      const inputRange1 = document.querySelector(".input-range-1");
+      const rangeTransform2 = document.querySelector(".range-transform-2");
+      const inputRange2 = document.querySelector(".input-range-2");
+      const inputDuration = document.querySelector(".input-duration");
+      const inputDelay = document.querySelector(".input-delay");
+      const selectTiming = document.querySelector(".select-timing");
+      const selectFill = document.querySelector(".select-fill");
+      const selectDirection = document.querySelector(".select-direction");
+      const radioIteration = document.querySelectorAll(".radio-iteration");
+      const inputIteration = document.querySelector(".input-iteration");
+      
+      const inputPerspective = document.querySelector(".input-perspective");
+      const inputWidth = document.querySelector(".input-width");
+      const inputHeight = document.querySelector(".input-height");
+      const buttonUpload = document.querySelector('.input-upload');
+      
+      let sliderIsActive = false;
+      let animationIsActive = true;
+      let perspectiveIsActive = false;
+      let gridIsActive = false;
+      let iterationValue = 'infinite';
+
+      let perspectiveValue = inputPerspective.value;
+      const perspectiveCss = () => {
+        if (perspectiveIsActive) {
+          return `
+.element-container {
+  perspective: ${perspectiveValue}px;
+}
+`;
+        } else {
+          return '';
+        }
+      }
+
+      let mouseX = 50;
+      let mouseY = 50;
+      let relativeX = 50;
+      let relativeY = 50;
+      
+      let currentTransform = 'rotate';
+      const transformTypes = {
+        translateX : {
+          min : -100,
+          max : 100,
+          step : 1,
+          unit : '%'
+        },
+        translateY : {
+          min : -100,
+          max : 100,
+          step : 1,
+          unit : '%'
+        },
+        rotate : {
+          min : 0,
+          max : 360,
+          step : 1,
+          unit : 'deg'
+        },
+        rotateX : {
+          min : 0,
+          max : 360,
+          step : 1,
+          unit : 'deg'
+        },
+        rotateY : {
+          min : 0,
+          max : 360,
+          step : 1,
+          unit : 'deg'
+        },
+        scale : {
+          min : 0,
+          max : 2,
+          step : 0.1,
+          unit : ''
+        },
+        skewX : {
+          min : -90,
+          max : 90,
+          step : 1,
+          unit : 'deg'
+        },
+        skewY : {
+          min : -90,
+          max : 90,
+          step : 1,
+          unit : 'deg'
+        }
+      }
+
+
+      /* === Result funtioning === */
+
+      const restartAnimation = () => {
+        animDiv.style.animationName = `none`;
+        window.setTimeout(() => {
+          animDiv.style.animationName = `${selectTransform.value}Anim`;
+        }, 100);
+      }
+
+      const removeAnimation= () => {
+        animDiv.style.removeProperty('animation-name');
+        animDiv.style.removeProperty('animation-duration');
+        animDiv.style.removeProperty('animation-delay');
+        animDiv.style.removeProperty('animation-timing-function');
+        animDiv.style.removeProperty('animation-fill-mode');
+        animDiv.style.removeProperty('animation-direction');
+        animDiv.style.removeProperty('animation-iteration-count');
+      }
+
+      const setAnimationProperties = () => {
+        animDiv.style.transformOrigin = `${relativeX}% ${relativeY}%`;
+        animDiv.style.transform = `${selectTransform.value}(${inputRange2.value}${transformTypes[currentTransform].unit})`;
+        animDiv.style.animationName = `${selectTransform.value}Anim`;
+        animDiv.style.animationDuration = `${inputDuration.value}s`;
+        animDiv.style.animationDelay = `${inputDelay.value}s`;
+        animDiv.style.animationTimingFunction = `${selectTiming.value}`;
+        animDiv.style.animationFillMode = `${selectFill.value}`;
+        animDiv.style.animationDirection = `${selectDirection.value}`;
+        animDiv.style.animationIterationCount = `${iterationValue}`;
+      }
+
+      const displayResult = () => {
+        if (animationIsActive) {
+          resultDiv.value = `.element {
+  transform-origin: ${Math.floor(relativeX)}% ${Math.floor(relativeY)}%;
+  animation-name: ${selectTransform.value}Anim;
+  animation-duration: ${inputDuration.value}s;
+  animation-timing-function: ${selectTiming.value};
+  animation-delay: ${inputDelay.value}s;
+  animation-fill-mode: ${selectFill.value};
+  animation-direction: ${selectDirection.value};
+  animation-iteration-count: ${iterationValue};
+}
+${perspectiveCss()}
+@keyframes ${selectTransform.value}Anim {
+  from{
+    transform: ${selectTransform.value}(${inputRange1.value}${transformTypes[currentTransform].unit});
+  }
+  to{
+    transform: ${selectTransform.value}(${inputRange2.value}${transformTypes[currentTransform].unit});
+  }
+}`
+        } else {
+          resultDiv.value = `.element {
+  transform: ${selectTransform.value}(${inputRange2.value}${transformTypes[currentTransform].unit});
+  transform-origin: ${Math.floor(relativeX)}% ${Math.floor(relativeY)}%
+};
+${perspectiveCss()}`;
+        }
+      };
+
+      
+      /* === Slider functioning === */
+
+      function getMouseXY(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }
+
+      const moveSlider = (valueX, valueY) => {
+        sliderDiv.style.left = `${valueX}%`;
+        sliderDiv.style.top = `${valueY}%`;
+      };
+
+      const setTransformOrigin = (valueX, valueY) => {
+        animDiv.style.transformOrigin = `${valueX}% ${valueY}%`;
+      };
+
+      const pointerAction = (e) => {
+        getMouseXY(e);
+
+        // Substract the sidebar.
+        mouseX -= creativeDiv.offsetLeft;
+        mouseY -= creativeDiv.offsetTop;
+
+        // Add margins because the mainDiv is smaller than creativeDiv.
+        mouseX -= (creativeDiv.offsetWidth - mainDiv.offsetWidth) / 2;
+        mouseY -= (creativeDiv.offsetHeight - mainDiv.offsetHeight) / 2;
+        console.log(mouseX, mouseY);
+
+        relativeX = (mouseX * 100) / mainDiv.offsetWidth;
+        relativeY = (mouseY * 100) / mainDiv.offsetHeight;
+
+        moveSlider(relativeX, relativeY);
+        setTransformOrigin(relativeX, relativeY);
+        displayResult();
+      }
+
+      sliderDiv.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        sliderIsActive = !sliderIsActive;
+
+        if (sliderIsActive) {
+          creativeDiv.addEventListener("mousemove", pointerAction);
+        } else {
+          creativeDiv.removeEventListener("mousemove", pointerAction);
+        }
+      });
+
+      /* === Keyframes generation === */
+
+      const updateKeyframes = () => {
+        cssKeyframes.nodeValue = `@keyframes ${selectTransform.value}Anim { from{ transform: ${selectTransform.value}(${inputRange1.value}${transformTypes[currentTransform].unit}); } to{ transform: ${selectTransform.value}(${inputRange2.value}${transformTypes[currentTransform].unit}); } }`;
+      }
+
+      let keyframesStyle = document.createElement('style');
+      keyframesStyle.type = 'text/css';
+      let cssKeyframes = document.createTextNode(`@keyframes ${selectTransform.value}Anim { from{ transform: ${selectTransform.value}(0${transformTypes[currentTransform].unit}); } to{ transform: ${selectTransform.value}(${inputRange2.value}${transformTypes[currentTransform].unit}); } }`);
+      keyframesStyle.appendChild(cssKeyframes);
+      document.getElementsByTagName("head")[0].appendChild(keyframesStyle);
+
+
+      /* === Sidebar configurators === */
+
+      const updateTransformRange = () => {
+        rangeTransform1.setAttribute('max', transformTypes[currentTransform].max);
+        rangeTransform1.setAttribute('min', transformTypes[currentTransform].min);
+        rangeTransform1.setAttribute('step', transformTypes[currentTransform].step);
+        rangeTransform1.value = transformTypes[currentTransform].min;
+        inputRange1.value = transformTypes[currentTransform].min;
+        rangeTransform2.setAttribute('max', transformTypes[currentTransform].max);
+        rangeTransform2.setAttribute('min', transformTypes[currentTransform].min);
+        rangeTransform2.setAttribute('step', transformTypes[currentTransform].step);
+        rangeTransform2.value = transformTypes[currentTransform].max;
+        inputRange2.value = transformTypes[currentTransform].max;
+      }
+
+      selectTransform.addEventListener("change", () => {
+        animDiv.style.animationName = `${selectTransform.value}Anim`;
+        currentTransform = selectTransform.value;
+        updateTransformRange();
+        document.querySelector('.range-transform-unit-1').innerHTML = `&nbsp;${transformTypes[currentTransform].unit}`;
+        document.querySelector('.range-transform-unit-2').innerHTML = `&nbsp;${transformTypes[currentTransform].unit}`;
+      });
+
+      rangeTransform1.addEventListener("change", () => {
+        inputRange1.value = rangeTransform1.value;
+        displayResult();
+        updateKeyframes();
+      });
+
+      inputRange1.addEventListener("change", () => {
+        rangeTransform1.value = inputRange1.value;
+        displayResult();
+        updateKeyframes();
+      });
+
+      rangeTransform2.addEventListener("change", () => {
+        inputRange2.value = rangeTransform2.value;
+        animDiv.style.transform = `${selectTransform.value}(${inputRange2.value}${transformTypes[currentTransform].unit})`;
+        displayResult();
+        updateKeyframes();
+      });
+
+      inputRange2.addEventListener("change", () => {
+        rangeTransform2.value = inputRange2.value;
+        animDiv.style.transform = `${selectTransform.value}(${inputRange2.value}${transformTypes[currentTransform].unit})`;
+        displayResult();
+        updateKeyframes();
+      });
+
+      inputDuration.addEventListener("change", () => {
+        animDiv.style.animationDuration = `${inputDuration.value}s`;
+        displayResult();
+        updateKeyframes();
+      });
+
+      inputDelay.addEventListener("change", () => {
+        animDiv.style.animationDelay = `${inputDelay.value}s`;
+        restartAnimation();
+        displayResult();
+        updateKeyframes();
+      });
+
+      selectTiming.addEventListener("change", () => {
+        animDiv.style.animationTimingFunction = `${selectTiming.value}`;
+      });
+
+      selectFill.addEventListener("change", () => {
+        animDiv.style.animationFillMode = `${selectFill.value}`;
+      });
+
+      selectDirection.addEventListener("change", () => {
+        animDiv.style.animationDirection = `${selectDirection.value}`;
+      });
+
+      for(const radio of radioIteration){
+        radio.addEventListener("change", () => {
+          if ((radio.value == 'infinite') && radio.checked) {
+            iterationValue = 'infinite';
+          } else {
+            iterationValue = inputIteration.value;
+          }
+          animDiv.style.animationIterationCount = `${iterationValue}`;
+          restartAnimation();
+          displayResult();
+          updateKeyframes();
+        });
+      }
+
+      inputIteration.addEventListener("change", () => {
+        animDiv.style.animationIterationCount = `${inputIteration.value}`;
+        iterationValue = inputIteration.value;
+        radioIteration[0].checked = false;
+        radioIteration[1].checked = true;
+        restartAnimation();
+        displayResult();
+        updateKeyframes();
+      });
+
+      /* === Common events === */
+
+      for (const select of selects) {
+        select.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+        });
+
+        select.addEventListener("change", () => {
+          displayResult();
+          updateKeyframes();
+        });
+      }
+
+      /* === Upload assets === */
+      
+      buttonUpload.addEventListener('change', (event) => {
+
+        if (sessionStorage.getItem('asset-background')) {
+          sessionStorage.removeItem('asset-background');
+        }
+
+        // Save image in Local Storage
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+          sessionStorage.setItem('asset-background', reader.result);
+          let recentImageDataUrl = sessionStorage.getItem('asset-background');
+          animDiv.style.backgroundImage = `url(${recentImageDataUrl})`;
+        }, false);
+        reader.readAsDataURL(event.target.files[0]);
+
+      });
+
+      /* === Controls events === */
+
+      document.querySelector(".input-animated").addEventListener("change", () => {
+        animationIsActive = !animationIsActive;
+        //animDiv.style.animationName = animationIsActive ? `${selectTransform.value}Anim` : `none`;
+        if (animationIsActive) {
+          restartAnimation();
+          setAnimationProperties();
+          document.querySelector('.range-1-container').style.display = 'flex';
+        } else {
+          removeAnimation();
+          document.querySelector('.range-1-container').style.display = 'none';
+        }
+        displayResult();
+        updateKeyframes();
+      });
+      
+      inputPerspective.addEventListener("change", () => {
+        perspectiveValue = inputPerspective.value;
+        perspectiveIsActive = true;
+        document.querySelector(".check-perspective").checked = true;
+        mainDiv.style.perspective = perspectiveIsActive ? `${perspectiveValue}px` : 'none';
+        displayResult();
+      });
+
+      document.querySelector(".check-perspective").addEventListener("change", () => {
+        perspectiveIsActive = !perspectiveIsActive;
+        mainDiv.style.perspective = perspectiveIsActive ? `${perspectiveValue}px` : 'none';
+        displayResult();
+      });
+
+      document.querySelector(".input-grid").addEventListener("change", () => {
+        gridIsActive = !gridIsActive;
+        document.querySelector(".grid").style.opacity = gridIsActive ? 1 : 0;
+      });
+ 
+      inputWidth.addEventListener("change", () => {
+        mainDiv.style.width = `${inputWidth.value}px`;
+      });
+
+      inputHeight.addEventListener("change", () => {
+        mainDiv.style.height = `${inputHeight.value}px`;
+      });
+
+      document.querySelector(".button-reload").addEventListener("click", () => {
+        if (animationIsActive) {
+          restartAnimation();
+        } else {
+          alert('The animation is inactive.');
+        }
+      });
+
+
+      /* === Initial styles === */
+
+      setAnimationProperties();
+      displayResult();
+
+      rangeTransform1.setAttribute('max', transformTypes[currentTransform].max);
+      rangeTransform1.setAttribute('min', transformTypes[currentTransform].min);
+      rangeTransform1.setAttribute('step', transformTypes[currentTransform].step);
+      rangeTransform2.setAttribute('max', transformTypes[currentTransform].max);
+      rangeTransform2.setAttribute('min', transformTypes[currentTransform].min);
+      rangeTransform2.setAttribute('step', transformTypes[currentTransform].step);
+      // Range values and rest of parameters are defined in the HTML.
+
+      inputWidth.value = mainDiv.offsetWidth;
+      inputHeight.value = mainDiv.offsetHeight;
+
+    </script>
+  </body>
+</html>
