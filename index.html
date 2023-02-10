@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon"
+        href="https://www.seedtag.com/static/images/seedtag-icon-red-aed656eca0e6f5a14a5ed6fc62e0d878.svg" />
+    <link rel="stylesheet" href="styles/main.css" />
+
+    <title>Layout Maker</title>
+</head>
+
+<body>
+    <div class="app-container building-CBV view-full view-bar-video view-bar-show">
+
+        <div class="generator-container">
+
+            <div class="generator-header">
+                <input type="text" value="front" placeholder="Component name">
+                <div>
+                    <button class="generator-clear">Clear code</button>
+                    <!-- <select class="generator-config-component">
+                        <option value="Front layer" selected>Front layer</option>
+                        <option value="Slide layer">Slide layer</option>
+                        <option value="Configuration layer">Configuration layer</option>
+                    </select> -->
+                    <select class="generator-config-format">
+                        <option value="CED">CED</option>
+                        <option value="CID">CID</option>
+                        <option value="CEV">CEV</option>
+                        <option value="CBV" selected>CBV</option>
+                    </select>
+                    <select class="generator-config-scene">
+                        <option value="all" selected>View all scenes</option>
+                        <option value="full">Full</option>
+                        <option value="bar-video">Bar-Video</option>
+                        <option value="bar-show">Bar-Show</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="generator-element-container">
+
+                <!-- Element 1: BG -->
+                <div class="generator-element" data-type="bg" data-count="1">
+                    <div class="element-config">
+                        <input type="text" class="element-config-name" value="bg-1">
+                        <select class="element-config-extension">
+                            <option value="jpg" selected>JPG</option>
+                            <option value="png">PNG</option>
+                            <option value="svg">SVG</option>
+                        </select>
+                        <select class="element-config-animation">
+                            <option value="none" selected>No animation</option>
+                            <option value="fade-in">Fade in</option>
+                            <option value="left-to-right">Left to right</option>
+                            <option value="right-to-left">Right to left</option>
+                            <option value="slide-up">Slide up</option>
+                            <option value="slide-down">Slide down</option>
+                            <option value="scale-up">Scale up</option>
+                            <option value="scale-down">Scale down</option>
+                            <option value="scale-down">Float</option>
+                        </select>
+                        <label><input type="checkbox" value="decoy">Make decoy</label>
+                        <label><input type="checkbox" value="overflow">Overflow</label>
+                        <button class="element-config-delete">Delete</button>
+                    </div>
+                    <div class="layout-collection layouts-full layouts-full-vertical">
+                        <p>Full: Vertical</p>
+                        <input type="radio" data-type="bg" data-count="1" data-scene="full" data-size="vertical" data-layout="0" name="bg-1-full-vertical" id="bg-1-full-vertical-0" checked />
+                        <label for="bg-full-vertical-0"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" data-type="bg" data-count="1" data-scene="full" data-size="vertical" data-layout="1" name="bg-1-full-vertical" id="bg-1-full-vertical-1" checked />
+                        <label for="bg-full-vertical-1"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" data-type="bg" data-count="1" data-scene="full" data-size="vertical" data-layout="2" name="bg-1-full-vertical" id="bg-1-full-vertical-2" />
+                        <label for="bg-full-vertical-2"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" data-type="bg" data-count="1" data-scene="full" data-size="vertical" data-layout="3" name="bg-1-full-vertical" id="bg-1-full-vertical-3" />
+                        <label for="bg-full-vertical-3"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+                    </div>
+                    
+                    <div class="layout-collection layouts-full layouts-full-horizontal">
+                        <p>Full: Horizontal</p>
+                        <input type="radio" data-type="bg" data-count="1" data-scene="full" data-size="horizontal" name="bg-1-full-horizontal" id="bg-1-full-horizontal-0" checked />
+                        <label for="bg-full-horizontal-0"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" data-type="bg" data-count="1" data-scene="full" data-size="horizontal" name="bg-1-full-horizontal" id="bg-1-full-horizontal-1" checked />
+                        <label for="bg-full-horizontal-1"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" data-type="bg" data-count="1" data-scene="full" data-size="horizontal" name="bg-1-full-horizontal" id="bg-1-full-horizontal-2" />
+                        <label for="bg-full-horizontal-2"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" data-type="bg" data-count="1" data-scene="full" data-size="horizontal" name="bg-1-full-horizontal" id="bg-1-full-horizontal-3" />
+                        <label for="bg-full-horizontal-3"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+                    </div>
+
+                    <div class="layout-collection layouts-bar-video layouts-bar-video-mobile">
+                        <p>Bar-video: Mobile</p>
+                        <input type="radio" name="bg-bar-video-mobile" id="bg-bar-video-mobile-0"/>
+                        <label for="bg-bar-video-mobile-0"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-video-mobile" id="bg-bar-video-mobile-1" checked/>
+                        <label for="bg-bar-video-mobile-1"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-video-mobile" id="bg-bar-video-mobile-2"/>
+                        <label for="bg-bar-video-mobile-2"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-video-mobile" id="bg-bar-video-mobile-3"/>
+                        <label for="bg-bar-video-mobile-3"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+                    </div>
+                    
+                    <div class="layout-collection layouts-bar-video layouts-bar-video-desktop">
+                        <p>Bar-video: Desktop</p>
+                        <input type="radio" name="bg-bar-video-desktop" id="bg-bar-video-desktop-0"/>
+                        <label for="bg-bar-video-desktop-0"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-video-desktop" id="bg-bar-desktop-video-1" checked />
+                        <label for="bg-bar-video-desktop-1"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-video-desktop" id="bg-bar-video-desktop-2"/>
+                        <label for="bg-bar-video-desktop-2"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-video-desktop" id="bg-bar-video-desktop-3"/>
+                        <label for="bg-bar-video-desktop-3"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+                    </div>
+
+                    <div class="layout-collection layouts-bar-show layouts-bar-show-mobile">
+                        <p>Bar-show: Mobile</p>
+                        <input type="radio" name="bg-bar-show-mobile" id="bg-bar-show-mobile-0"/>
+                        <label for="bg-bar-show-mobile-0"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+                        
+                        <input type="radio" name="bg-bar-show-mobile" id="bg-bar-show-mobile-1" checked />
+                        <label for="bg-bar-show-mobile-1"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-show-mobile" id="bg-bar-show-mobile-2"/>
+                        <label for="bg-bar-show-mobile-2"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-show-mobile" id="bg-bar-show-mobile-3"/>
+                        <label for="bg-bar-show-mobile-3"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+                    </div>
+
+                    <div class="layout-collection layouts-bar-show layouts-bar-show-desktop">
+                        <p>Bar-show: Desktop</p>
+                        <input type="radio" name="bg-bar-show-desktop" id="bg-bar-show-desktop-0"/>
+                        <label for="bg-bar-show-desktop-0"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+                        
+                        <input type="radio" name="bg-bar-show-desktop" id="bg-bar-show-desktop-1" checked />
+                        <label for="bg-bar-show-desktop-1"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-show-desktop" id="bg-bar-show-desktop-2"/>
+                        <label for="bg-bar-show-desktop-2"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+
+                        <input type="radio" name="bg-bar-show-desktop" id="bg-bar-show-desktop-3"/>
+                        <label for="bg-bar-show-desktop-3"><div class="layout-image-container"><div class="layout-image"></div></div></label>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="generator-footer">
+                <select class="generator-add">
+                    <option value="Add" disabled hidden selected>Add element</option>
+                    <option value="bg">Background</option>
+                    <option value="block">Block</option>
+                    <option value="cta">CTA</option>
+                    <option value="legal">Legal</option>
+                    <option value="logo">Logo</option>
+                    <option value="video">Video</option>
+                </select>
+                <button class="generator-generate">Generate code</button>
+            </div>
+        </div>
+
+
+        <div class="preview-container">
+            <h3>Result preview</h3>
+            <div class="preview">
+                <div class="preview-full preview-vertical"></div>
+                <div class="preview-full preview-horizontal"></div>
+                <div class="preview-bar-video preview-mobile"></div>
+                <div class="preview-bar-video preview-desktop"></div>
+                <div class="preview-bar-show preview-mobile"></div>
+                <div class="preview-bar-show preview-desktop"></div>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <div class="result-container">
+                <div class="input-title-container">
+                    <p class="result-title">@component/component.html</p>
+                    <!-- <button data-type="text-scene-full-css" class="button-copy">Copy</button> -->
+                </div>
+                <textarea id="result-hmtl" rows="12" cols="200" spellcheck="false"></textarea>
+            </div>
+
+            <div class="result-container">
+                <div class="input-title-container">
+                    <p class="result-title">@component/component.css</p>
+                    <!-- <button data-type="text-scene-full-css" class="button-copy">Copy</button> -->
+                </div>
+                <textarea id="result-css" rows="12" cols="200" spellcheck="false"></textarea>
+            </div>
+
+            <div class="result-container">
+                <div class="input-title-container">
+                    <p class="result-title">@component/component.js</p>
+                    <!-- <button data-type="text-scene-full-css" class="button-copy">Copy</button> -->
+                </div>
+                <textarea id="result-js" rows="12" cols="200" spellcheck="false"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/main.js"></script>
+    <!-- <script src="scripts/layouts.js" type="module"></script> -->
+</body>
+
+</html>
